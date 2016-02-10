@@ -22,6 +22,8 @@ function Config(applicationId, mount) {
   this.fileKey = cacheInfo.fileKey;
   this.facebookAppIds = cacheInfo.facebookAppIds;
   this.mount = mount;
+  this.notificationHubName = cacheInfo.notificationHubName;
+  this.notificationHubConnectionString = cacheInfo.notificationHubConnectionString;
 }
 
 

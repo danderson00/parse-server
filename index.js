@@ -7,6 +7,7 @@ var batch = require('./batch'),
     express = require('express'),
     FilesAdapter = require('./FilesAdapter'),
     S3Adapter = require('./S3Adapter'),
+    NotificationHubAdapter = require('./NotificationHubAdapter'),
     middlewares = require('./middlewares'),
     multer = require('multer'),
     Parse = require('parse/node').Parse,
@@ -52,6 +53,9 @@ function ParseServer(args) {
   if (args.databaseURI) {
     DatabaseAdapter.setAppDatabaseURI(args.appId, args.databaseURI);
   }
+  if (args.notificationHubName && args.notificationHubConnectionString) {
+    NotificationHubAdapter.setConnection(args.notificationHubName, args.notificationHubConnectionString);
+  }
   if (args.cloud) {
     addParseCloud();
     if (typeof args.cloud === 'function') {
@@ -61,7 +65,6 @@ function ParseServer(args) {
     } else {
       throw "argument 'cloud' must either be a string or a function";
     }
-
   }
 
   cache.apps[args.appId] = {
@@ -72,7 +75,9 @@ function ParseServer(args) {
     dotNetKey: args.dotNetKey || '',
     restAPIKey: args.restAPIKey || '',
     fileKey: args.fileKey || 'invalid-file-key',
-    facebookAppIds: args.facebookAppIds || []
+    facebookAppIds: args.facebookAppIds || [],
+    notificationHubName: args.notificationHubName,
+    notificationHubConnectionString: args.notificationHubConnectionString
   };
 
   // To maintain compatibility. TODO: Remove in v2.1

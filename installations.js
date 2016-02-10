@@ -3,14 +3,15 @@
 var Parse = require('parse/node').Parse;
 var PromiseRouter = require('./PromiseRouter');
 var rest = require('./rest');
+var hub = require('./NotificationHubAdapter');
 
 var router = new PromiseRouter();
 
 
 // Returns a promise for a {status, response, location} object.
 function handleCreate(req) {
-  return rest.create(req.config,
-                     req.auth, '_Installation', req.body);
+  hub.createOrUpdateInstallation(req.body);
+  return rest.create(req.config, req.auth, '_Installation', req.body);
 }
 
 // Returns a promise that resolves to a {response} object.
@@ -55,8 +56,8 @@ function handleGet(req) {
 
 // Returns a promise for a {response} object.
 function handleUpdate(req) {
-  return rest.update(req.config, req.auth,
-                     '_Installation', req.params.objectId, req.body)
+  //hub.createOrUpdateInstallation(req.body);
+  return rest.update(req.config, req.auth, '_Installation', req.params.objectId, req.body)
   .then((response) => {
     return {response: response};
   });
@@ -64,8 +65,8 @@ function handleUpdate(req) {
 
 // Returns a promise for a {response} object.
 function handleDelete(req) {
-  return rest.del(req.config, req.auth,
-                  '_Installation', req.params.objectId)
+  //hub.deleteInstallation(req.params.objectId);
+  return rest.del(req.config, req.auth, '_Installation', req.params.objectId)
   .then(() => {
     return {response: {}};
   });
